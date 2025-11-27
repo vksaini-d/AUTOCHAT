@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: autochat-backend
+    env: docker
+    plan: free
+    buildCommand: docker build -t autochat-backend .
+    startCommand: npm run start:prod
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: autochat-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: autochat-redis
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+
+databases:
+  - name: autochat-db
+    plan: free
+    databaseName: autochat
+    user: admin
+
+# Render does not support free Redis in the YAML blueprint directly in the same way,
+# but this serves as a template. You may need to create a Redis instance manually
+# or use an internal one if available on your plan.

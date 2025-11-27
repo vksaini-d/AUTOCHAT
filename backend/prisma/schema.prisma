@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  personas  Persona[]
+  logs      MessageLog[]
+}
+
+model Persona {
+  id            String   @id @default(uuid())
+  name          String
+  chatTune      String   // friendly, professional, etc.
+  emotionalTone String   // calm, excited, etc.
+  behavior      String   // short, detailed, etc.
+  isActive      Boolean  @default(false)
+  
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model MessageLog {
+  id             String   @id @default(uuid())
+  platform       String
+  incomingText   String
+  replyText      String?
+  sentiment      String?
+  
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  
+  createdAt      DateTime @default(now())
+}
