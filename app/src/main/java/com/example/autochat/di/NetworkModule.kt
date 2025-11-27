@@ -15,7 +15,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    // TODO: Replace with your actual Render URL once deployed
+    // Live Render URL
     private const val BASE_URL = "https://autochat-backend.onrender.com/"
 
     @Provides
