@@ -4,8 +4,7 @@ services:
     rootDir: backend
     env: docker
     plan: free
-    buildCommand: docker build -t autochat-backend .
-    startCommand: npm run start:prod
+    # Docker runtime uses the CMD from the Dockerfile, so we remove startCommand and buildCommand
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -22,6 +21,11 @@ services:
         sync: false
       - key: HF_API_KEY
         sync: false
+
+  - type: redis
+    name: autochat-redis
+    plan: free
+    ipAllowList: [] # Internal access only
 
 databases:
   - name: autochat-db
